@@ -1,0 +1,24 @@
+# permissions for end users to edit awsauthsyncconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: awsauthsyncconfig-editor-role
+rules:
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs/status
+  verbs:
+  - get
