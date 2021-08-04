@@ -1,5 +1,7 @@
 # aws-auth-operator
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Go Report
+Card](https://goreportcard.com/badge/github.com/gp42/aws-auth-operator)](https://goreportcard.com/report/github.com/gp42/aws-auth-operator)
 
 This operator helps to manage
 ['aws-auth'](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html) ConfigMap for AWS EKS.

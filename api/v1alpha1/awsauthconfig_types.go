@@ -33,9 +33,9 @@ type AwsAuthSyncConfigSpec struct {
 }
 
 type AwsAuthSyncConfigGroupSync struct {
-	// Source AWS IAM group for syncronization
+	// Source AWS IAM group for synchronization
 	Source string `json:"source"`
-	// Destination K8s RBAC group for syncronization
+	// Destination K8s RBAC group for synchronization
 	Dest string `json:"dest"`
 }
 
