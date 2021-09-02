@@ -1,0 +1,53 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: aws-auth-operator.v0.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: AwsAuthSyncConfig is the Schema for the awsauthsyncconfigs API
+      displayName: Aws Auth Sync Config
+      kind: AwsAuthSyncConfig
+      name: awsauthsyncconfigs.auth.ops42.org
+      version: v1alpha1
+  description: Manage 'aws-auth' ConfigMap for AWS EKS
+  displayName: aws-auth-operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - aws eks
+  - aws-auth
+  - iam
+  - rbac
+  - access control
+  links:
+  - name: Aws Auth Operator
+    url: https://aws-auth-operator.domain
+  maintainers:
+  - email: gennadiy.potapov@gmail.com
+    name: Gennady Potapov
+  maturity: alpha
+  minKubeVersion: 1.20.0
+  provider:
+    name: Gennady Potapov
+    url: ops42.org
+  version: 0.0.0

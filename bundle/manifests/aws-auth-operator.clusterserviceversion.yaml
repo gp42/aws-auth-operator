@@ -1,0 +1,208 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "auth.ops42.org/v1alpha1",
+          "kind": "AwsAuthSyncConfig",
+          "metadata": {
+            "name": "default"
+          },
+          "spec": {
+            "syncIamGroups": [
+              {
+                "dest": "dev-operator-k8s-admins",
+                "source": "dev-operator-k8s-admins"
+              },
+              {
+                "dest": "dev-operator-k8s-users",
+                "source": "dev-operator-k8s-users"
+              }
+            ]
+          }
+        }
+      ]
+    capabilities: Basic Install
+    operators.operatorframework.io/builder: operator-sdk-v1.8.0+git
+    operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
+  name: aws-auth-operator.v0.0.2
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: AwsAuthSyncConfig is the Schema for the awsauthsyncconfigs API
+      displayName: Aws Auth Sync Config
+      kind: AwsAuthSyncConfig
+      name: awsauthsyncconfigs.auth.ops42.org
+      version: v1alpha1
+  description: Manage 'aws-auth' ConfigMap for AWS EKS
+  displayName: aws-auth-operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - auth.ops42.org
+          resources:
+          - awsauthsyncconfigs
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - auth.ops42.org
+          resources:
+          - awsauthsyncconfigs/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - auth.ops42.org
+          resources:
+          - awsauthsyncconfigs/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        serviceAccountName: aws-auth-operator-controller-manager
+      deployments:
+      - name: aws-auth-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=10
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                resources: {}
+              - args:
+                - --health-probe-bind-address=:8081
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                command:
+                - /manager
+                image: docker.io/gp42/aws-auth-operator:v0.0.2
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 100m
+                    memory: 30Mi
+                  requests:
+                    cpu: 100m
+                    memory: 20Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: aws-auth-operator-controller-manager
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: aws-auth-operator-controller-manager
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - aws eks
+  - aws-auth
+  - iam
+  - rbac
+  - access control
+  links:
+  - name: Aws Auth Operator
+    url: https://aws-auth-operator.domain
+  maintainers:
+  - email: gennadiy.potapov@gmail.com
+    name: Gennady Potapov
+  maturity: alpha
+  minKubeVersion: 1.20.0
+  provider:
+    name: Gennady Potapov
+    url: ops42.org
+  version: 0.0.2

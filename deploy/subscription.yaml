@@ -1,0 +1,16 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: aws-auth-operator
+  namespace: operators
+spec:
+  channel: "alpha"
+  installPlanApproval: Manual
+  name: aws-auth-operator
+  source: aws-auth-operator-catalog
+  sourceNamespace: operators
+  startingCSV: aws-auth-operator.v0.0.2
+  config:
+    envFrom:
+      - secretRef:
+          name: aws-auth-operator-secret

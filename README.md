@@ -23,3 +23,19 @@ ConfigMap.
 
 1. Deploy the operator
 1. Create the AwsAuthSyncConfig resource
+
+## Development
+
+**Running with OLM**
+See [Testing Operator Deployment with
+OLM](https://sdk.operatorframework.io/docs/olm-integration/testing-deployment/) documentation.
+```
+make docker-build docker-push IMG=docker.io/gp42/aws-auth-operator:v0.0.1
+make bundle
+operator-sdk run bundle docker.io/gp42/aws-auth-operator-bundle:v0.0.1 --install-mode AllNamespaces --namespace operators
+```
+
+Cleanup:
+```
+operator-sdk cleanup aws-auth-operator --delete-all --namespace operators
+```

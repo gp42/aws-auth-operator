@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: aws-auth-operator-catalog
+  namespace: operators
+spec:
+  displayName: AWS Auth Operator
+  image: docker.io/gp42/aws-auth-operator-catalog:v0.0.2
+  sourceType: grpc
+  updateStrategy:
+    registryPoll:
+      interval: 10m
