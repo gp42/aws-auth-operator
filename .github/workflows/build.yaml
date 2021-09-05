@@ -1,0 +1,19 @@
+name: Build Bundle and Catalog
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Branch: ${{ github.ref }}"
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: cd ${{ github.workspace }}
+      - run: echo "Building Image..."
+      - run: |
+          CHANNELS=stable
+          DEFAULT_CHANNEL=stable
+          make docker-build
+      - run: echo "Job status is ${{ job.status }}."

@@ -123,13 +123,11 @@ var _ = BeforeSuite(func() {
 	})
 
 	err = (&AwsAuthSyncConfigReconciler{
-		Client:                    k8sManager.GetClient(),
-		Scheme:                    k8sManager.GetScheme(),
-		AwsAuthSyncConfigName:     "default",
-		SyncInterval:              60,
-		AwsAuthConfigMapName:      "aws-auth",
-		AwsAuthConfigMapNamespace: "kube-system",
-		IamClient:                 mock,
+		Client:                k8sManager.GetClient(),
+		Scheme:                k8sManager.GetScheme(),
+		AwsAuthSyncConfigName: "default",
+		SyncInterval:          60,
+		IamClient:             mock,
 	}).SetupWithManager(k8sManager)
 	Expect(err).ToNot(HaveOccurred())
 

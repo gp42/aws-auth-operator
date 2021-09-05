@@ -25,13 +25,13 @@ spec:
       deployments: null
     strategy: ""
   installModes:
-  - supported: false
+  - supported: true
     type: OwnNamespace
   - supported: false
     type: SingleNamespace
   - supported: false
     type: MultiNamespace
-  - supported: true
+  - supported: false
     type: AllNamespaces
   keywords:
   - aws eks
@@ -41,7 +41,7 @@ spec:
   - access control
   links:
   - name: Aws Auth Operator
-    url: https://aws-auth-operator.domain
+    url: https://github.com/gp42/aws-auth-operator
   maintainers:
   - email: gennadiy.potapov@gmail.com
     name: Gennady Potapov

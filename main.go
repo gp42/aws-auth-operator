@@ -40,12 +40,11 @@ import (
 )
 
 var (
-	scheme                        = runtime.NewScheme()
-	setupLog                      = ctrl.Log.WithName("setup")
-	flagAwsAuthSyncConfigName     string
-	flagSyncInterval              int
-	flagAwsAuthConfigMapName      string
-	flagAwsAuthConfigMapNamespace string
+	scheme                    = runtime.NewScheme()
+	setupLog                  = ctrl.Log.WithName("setup")
+	flagAwsAuthSyncConfigName string
+	flagSyncInterval          int
+	flagWatchNamespace        string
 )
 
 func init() {
@@ -66,9 +65,8 @@ func main() {
 			"Enabling this will ensure there is only one active controller manager.")
 
 	flag.StringVar(&flagAwsAuthSyncConfigName, "awsauthsyncconfig-name", "default", "Name of AwsAuthSyncConfig to monitor.")
+	flag.StringVar(&flagWatchNamespace, "watch-namespace", "kube-system", "Watch this namespace.")
 	flag.IntVar(&flagSyncInterval, "sync-interval", 60, "Sync AWS Auth Configuration every X seconds.")
-	flag.StringVar(&flagAwsAuthConfigMapName, "aws-auth-cm-name", "aws-auth", "Name of 'aws-auth' configmap.")
-	flag.StringVar(&flagAwsAuthConfigMapNamespace, "aws-auth-cm-namespace", "kube-system", "Namespace of 'aws-auth' configmap.")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -94,6 +92,7 @@ func main() {
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
 		LeaderElectionID:       "033562fd.ops42.org",
+		Namespace:              flagWatchNamespace,
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
@@ -101,13 +100,11 @@ func main() {
 	}
 
 	if err = (&controllers.AwsAuthSyncConfigReconciler{
-		Client:                    mgr.GetClient(),
-		Scheme:                    mgr.GetScheme(),
-		AwsAuthSyncConfigName:     flagAwsAuthSyncConfigName,
-		SyncInterval:              flagSyncInterval,
-		AwsAuthConfigMapName:      flagAwsAuthConfigMapName,
-		AwsAuthConfigMapNamespace: flagAwsAuthConfigMapNamespace,
-		IamClient:                 iamSvc,
+		Client:                mgr.GetClient(),
+		Scheme:                mgr.GetScheme(),
+		AwsAuthSyncConfigName: flagAwsAuthSyncConfigName,
+		SyncInterval:          flagSyncInterval,
+		IamClient:             iamSvc,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "AwsAuthSyncConfig")
 		os.Exit(1)

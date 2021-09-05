@@ -3,7 +3,6 @@ kind: AwsAuthSyncConfig
 metadata:
   name: default
 spec:
-  # Add fields here
   syncIamGroups:
     - source: dev-operator-k8s-admins
       dest: dev-operator-k8s-admins

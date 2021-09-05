@@ -49,7 +49,7 @@ type AwsAuthSyncConfigStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:resource:scope=Cluster
+//+kubebuilder:resource:scope=Namespaced
 
 // AwsAuthSyncConfig is the Schema for the awsauthsyncconfigs API
 type AwsAuthSyncConfig struct {

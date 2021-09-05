@@ -24,6 +24,40 @@ ConfigMap.
 1. Deploy the operator
 1. Create the AwsAuthSyncConfig resource
 
+## Running it in Production
+
+```
+kubectl apply -f deploy/catalogsource.yaml
+# check operators in catalogs:
+kubectl get packagemanifest
+```
+
+## Deploy
+Production flow
+1. Get version from VERSION
+1. CHANNEL=stable
+1. docker-build docker-push
+1. bundle-build bundle-push
+1. catalog-build catalog-push (version + stable)
+
+Dev flow
+
+Channels:
+- stable
+- candidate
+- dev
+
+Branches
+- main
+- candidate (from feature branches)
+- 
+
+state:    dev         --> candidate        --> main
+branch:   feature     --> candidate        --> main
+version:  0.0.0-hash  --> 0.0.0-rcHash     --> 0.0.0
+tags:                                      --> tag
+ci:       local       --> automation       --> automation
+
 ## Development
 
 **Running with OLM**
@@ -39,3 +73,18 @@ Cleanup:
 ```
 operator-sdk cleanup aws-auth-operator --delete-all --namespace operators
 ```
+
+### Update version
+1. Update VERSION in Makefile.
+1. Run commands:
+```
+make build
+make docker-build docker-push
+make bundle
+make bundle-build bundle-push
+make catalog-build catalog-push
+```
+
+**Troubleshooting**
+Make sure bundle/manifests/<csv>.yaml has updated version
+

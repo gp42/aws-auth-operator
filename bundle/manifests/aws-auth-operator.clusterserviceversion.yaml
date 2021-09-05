@@ -27,7 +27,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.8.0+git
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
-  name: aws-auth-operator.v0.0.2
+  name: aws-auth-operator.v0.0.3
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -48,32 +48,6 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
-          - auth.ops42.org
-          resources:
-          - awsauthsyncconfigs
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - auth.ops42.org
-          resources:
-          - awsauthsyncconfigs/finalizers
-          verbs:
-          - update
-        - apiGroups:
-          - auth.ops42.org
-          resources:
-          - awsauthsyncconfigs/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -85,9 +59,9 @@ spec:
           - subjectaccessreviews
           verbs:
           - create
-        serviceAccountName: aws-auth-operator-controller-manager
+        serviceAccountName: controller-manager
       deployments:
-      - name: aws-auth-operator-controller-manager
+      - name: controller-manager
         spec:
           replicas: 1
           selector:
@@ -117,7 +91,7 @@ spec:
                 - --leader-elect
                 command:
                 - /manager
-                image: docker.io/gp42/aws-auth-operator:v0.0.2
+                image: docker.io/gp42/aws-auth-operator:v0.0.3
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -142,7 +116,7 @@ spec:
                   allowPrivilegeEscalation: false
               securityContext:
                 runAsNonRoot: true
-              serviceAccountName: aws-auth-operator-controller-manager
+              serviceAccountName: controller-manager
               terminationGracePeriodSeconds: 10
       permissions:
       - rules:
@@ -177,16 +151,52 @@ spec:
           verbs:
           - create
           - patch
-        serviceAccountName: aws-auth-operator-controller-manager
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - auth.ops42.org
+          resources:
+          - awsauthsyncconfigs
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - auth.ops42.org
+          resources:
+          - awsauthsyncconfigs/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - auth.ops42.org
+          resources:
+          - awsauthsyncconfigs/status
+          verbs:
+          - get
+          - patch
+          - update
+        serviceAccountName: controller-manager
     strategy: deployment
   installModes:
-  - supported: false
+  - supported: true
     type: OwnNamespace
   - supported: false
     type: SingleNamespace
   - supported: false
     type: MultiNamespace
-  - supported: true
+  - supported: false
     type: AllNamespaces
   keywords:
   - aws eks
@@ -205,4 +215,4 @@ spec:
   provider:
     name: Gennady Potapov
     url: ops42.org
-  version: 0.0.2
+  version: 0.0.3

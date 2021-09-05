@@ -29,15 +29,27 @@ var _ = Describe("CronJob controller", func() {
 
 	Context("When updating AwsAuthSyncConfig Status", func() {
 		It("Should increase AwsAuthSyncConfig Status", func() {
-			By("By creating a new AwsAuthSyncConfig")
 			ctx := context.Background()
+			By("Creating a new aws-auth ConfigMap")
+			awsAuthCm := &corev1.ConfigMap{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      AwsAuthCmName,
+					Namespace: AwsAuthCmNamespace,
+				},
+				Data: map[string]string{},
+			}
+
+			Expect(k8sClient.Create(ctx, awsAuthCm)).Should(Succeed())
+
+			By("By creating a new AwsAuthSyncConfig")
 			AwsAuthSyncConfig := &authv1alpha1.AwsAuthSyncConfig{
 				TypeMeta: metav1.TypeMeta{
 					APIVersion: "auth.ops42.org/v1alpha1",
 					Kind:       "AwsAuthSyncConfig",
 				},
 				ObjectMeta: metav1.ObjectMeta{
-					Name: AwsAuthSyncConfigName,
+					Name:      AwsAuthSyncConfigName,
+					Namespace: AwsAuthCmNamespace,
 				},
 				Spec: authv1alpha1.AwsAuthSyncConfigSpec{
 					SyncIamGroups: []authv1alpha1.AwsAuthSyncConfigGroupSync{{
@@ -54,7 +66,10 @@ var _ = Describe("CronJob controller", func() {
 			}
 			Expect(k8sClient.Create(ctx, AwsAuthSyncConfig)).Should(Succeed())
 
-			awsAuthConfigLookupKey := client.ObjectKey{Name: AwsAuthSyncConfigName}
+			awsAuthConfigLookupKey := client.ObjectKey{
+				Name:      AwsAuthSyncConfigName,
+				Namespace: AwsAuthCmNamespace,
+			}
 			createdAwsAuthSyncConfig := &authv1alpha1.AwsAuthSyncConfig{}
 
 			Eventually(func() bool {
@@ -67,17 +82,6 @@ var _ = Describe("CronJob controller", func() {
 			Expect(createdAwsAuthSyncConfig.Spec.SyncIamGroups[0].Source).Should(Equal("mercenary-admins"))
 			Expect(createdAwsAuthSyncConfig.Spec.SyncIamGroups[1].Source).Should(Equal("mercenary-users"))
 			Expect(createdAwsAuthSyncConfig.Spec.SyncIamGroups[2].Source).Should(Equal("jedi-admins"))
-
-			By("Creating a new aws-auth ConfigMap")
-			awsAuthCm := &corev1.ConfigMap{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      AwsAuthCmName,
-					Namespace: AwsAuthCmNamespace,
-				},
-				Data: map[string]string{},
-			}
-
-			Expect(k8sClient.Create(ctx, awsAuthCm)).Should(Succeed())
 
 			By("By updating aws-auth ConfigMap")
 			synchedAwsAuthSyncConfig := &authv1alpha1.AwsAuthSyncConfig{}

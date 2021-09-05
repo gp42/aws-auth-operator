@@ -35,20 +35,23 @@ import (
 	"github.com/gp42/aws-auth-operator/controllers/model"
 )
 
+const (
+	AUTH_CM_NAME = "aws-auth"
+)
+
 // AwsAuthSyncConfigReconciler reconciles a AwsAuthSyncConfig object
 type AwsAuthSyncConfigReconciler struct {
 	client.Client
-	Scheme                    *runtime.Scheme
-	AwsAuthSyncConfigName     string
-	SyncInterval              int
-	AwsAuthConfigMapName      string
-	AwsAuthConfigMapNamespace string
-	IamClient                 model.IamClientInterface
+	Scheme                *runtime.Scheme
+	AwsAuthSyncConfigName string
+	SyncInterval          int
+	IamClient             model.IamClientInterface
 }
 
-//+kubebuilder:rbac:groups=auth.ops42.org,resources=awsauthsyncconfigs,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=auth.ops42.org,resources=awsauthsyncconfigs/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=auth.ops42.org,resources=awsauthsyncconfigs/finalizers,verbs=update
+//+kubebuilder:rbac:groups="",namespace=kube-system,resources=configmaps,verbs=get;list;watch;update;patch
+//+kubebuilder:rbac:groups=auth.ops42.org,namespace=kube-system,resources=awsauthsyncconfigs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=auth.ops42.org,namespace=kube-system,resources=awsauthsyncconfigs/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=auth.ops42.org,namespace=kube-system,resources=awsauthsyncconfigs/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -61,11 +64,11 @@ func (r *AwsAuthSyncConfigReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	// Get current AwsAuth ConfigMap
 	awsAuthCm := &corev1.ConfigMap{}
 	err := r.Get(ctx, client.ObjectKey{
-		Namespace: r.AwsAuthConfigMapNamespace,
-		Name:      r.AwsAuthConfigMapName,
+		Namespace: req.NamespacedName.Namespace,
+		Name:      AUTH_CM_NAME,
 	}, awsAuthCm)
 	if err != nil {
-		ctrl.Log.Error(err, "Failed to get AwsAuth ConfigMap")
+		ctrl.Log.Error(err, "Failed to get AwsAuth ConfigMap", "Namespace", req.NamespacedName.Namespace, "Name", AUTH_CM_NAME)
 		return ctrl.Result{Requeue: true}, err
 	}
 	oldSum := common.Sha512SumFromStringSorted(awsAuthCm.Data["mapUsers"])
@@ -105,8 +108,8 @@ func (r *AwsAuthSyncConfigReconciler) Reconcile(ctx context.Context, req ctrl.Re
 
 		err = r.Patch(context.Background(), &corev1.ConfigMap{
 			ObjectMeta: metav1.ObjectMeta{
-				Namespace: r.AwsAuthConfigMapNamespace,
-				Name:      r.AwsAuthConfigMapName,
+				Namespace: req.NamespacedName.Namespace,
+				Name:      AUTH_CM_NAME,
 			},
 		}, client.RawPatch(types.StrategicMergePatchType, patch))
 		if err != nil {
