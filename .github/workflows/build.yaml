@@ -7,13 +7,12 @@ jobs:
   Build-Image:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Branch"
       - name: Check out repository code
         uses: actions/checkout@v2
       - run: cd ${{ github.workspace }}
-#      - run: echo "Building Image..."
-#      - run: |
-#          CHANNELS=stable
-#          DEFAULT_CHANNEL=stable
-#          make docker-build
-#      - run: echo "Job status is ${{ job.status }}."
+      - run: echo "Building Image..."
+      - run: |
+          CHANNELS=stable
+          DEFAULT_CHANNEL=stable
+          make docker-build
+      - run: echo "Job status is ${{ job.status }}."
