@@ -9,8 +9,8 @@ jobs:
     steps:
       - run: echo foo
       - run: echo "Branch: ${{ github.ref }}"
-      - name: Check out repository code
-        uses: actions/checkout@v2
+#      - name: Check out repository code
+#        uses: actions/checkout@v2
 #      - run: cd ${{ github.workspace }}
 #      - run: echo "Building Image..."
 #      - run: |
