@@ -7,7 +7,7 @@ jobs:
   Build-Image:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Branch: ${{ github.ref }}"
+      - run: echo Branch: ${{ github.ref }}
 #      - name: Check out repository code
 #        uses: actions/checkout@v2
 #      - run: cd ${{ github.workspace }}
