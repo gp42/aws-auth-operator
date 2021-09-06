@@ -58,6 +58,10 @@ version:  0.0.0-hash  --> 0.0.0-rcHash     --> 0.0.0
 tags:                                      --> tag
 ci:       local       --> automation       --> automation
 
+                                      /--> main --> main
+candidate                   candidate --> 
+          \-> feature A --/
+
 ## Development
 
 **Running with OLM**
