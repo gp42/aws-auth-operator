@@ -1,0 +1,11 @@
+site_name: AWS Auth Operator
+site_url: https://ops42.org/aws-auth-operator/
+repo_url: https://github.com/gp42/aws-auth-operator
+theme:
+  name: material
+  font:
+    text: Roboto
+    code: Roboto Mono
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences

@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: aws-auth-operator-catalog
+  namespace: olm
+spec:
+  displayName: AWS Auth Operator
+  image: docker.io/gp42/aws-auth-operator-catalog:alpha
+  sourceType: grpc
+  updateStrategy:
+    registryPoll:
+      interval: 60m

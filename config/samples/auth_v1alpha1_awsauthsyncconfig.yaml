@@ -1,0 +1,11 @@
+apiVersion: auth.ops42.org/v1alpha1
+kind: AwsAuthSyncConfig
+metadata:
+  name: default
+  namespace: kube-system
+spec:
+  syncIamGroups:
+    - source: dev-operator-k8s-admins
+      dest: dev-operator-k8s-admins
+    - source: dev-operator-k8s-users
+      dest: dev-operator-k8s-users

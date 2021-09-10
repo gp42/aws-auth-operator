@@ -1,0 +1,20 @@
+# permissions for end users to view awsauthsyncconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: awsauthsyncconfig-viewer-role
+rules:
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs/status
+  verbs:
+  - get

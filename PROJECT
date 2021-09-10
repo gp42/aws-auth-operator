@@ -1,0 +1,19 @@
+domain: ops42.org
+layout:
+- go.kubebuilder.io/v3
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
+projectName: aws-auth-operator
+repo: github.com/gp42/aws-auth-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: ops42.org
+  group: auth
+  kind: AwsAuthSyncConfig
+  path: github.com/gp42/aws-auth-operator/api/v1alpha1
+  version: v1alpha1
+version: "3"

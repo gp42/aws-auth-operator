@@ -1,0 +1,42 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aws-auth-operator-manager-role
+  namespace: kube-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - auth.ops42.org
+  resources:
+  - awsauthsyncconfigs/status
+  verbs:
+  - get
+  - patch
+  - update
