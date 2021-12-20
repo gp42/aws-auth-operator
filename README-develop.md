@@ -50,3 +50,10 @@ export CHANNELS=$DEFAULT_CHANNEL
 make all-olm
 3. Add updated manifests to a feature branch and merge them to 'main'
 4. Create a Release from autoprovisioned Release draft
+```
+
+## Test mkdocs
+Serve mkdocs locally:
+```bash
+docker run --rm -it -p 8000:8000 -v ${PWD}:/docs squidfunk/mkdocs-material
+```
