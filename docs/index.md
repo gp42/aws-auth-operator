@@ -14,7 +14,7 @@ cluster, but both approaches are not ideal because:
 This operator is supposed to solve these problems by providing a tool for automated IAM Group
 synchronization and *aws-auth* ConfigMap management.
 
-![AWS IAM to EKS User Traceability](public/images/iam-eks-trace.jpg){ loading=lazy }
+![AWS IAM to EKS User Traceability](public/images/iam-eks-rounded.png){ loading=lazy }
 
 Read my blog article on [IAM User Traceability in AWS
 EKS](https://ops42.org/2021/12/19/User-Traceability-In-AWS-EKS.html?utm_source=aws-auth-operator_index&utm_medium=documentation) for more information on the
