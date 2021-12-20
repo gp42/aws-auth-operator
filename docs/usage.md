@@ -29,12 +29,12 @@ ConfigMap will be modified accordingly:
 ```yaml
   ...
   mapUsers: |
-    - userarn: arn:aws:iam::677983237296:user/john
+    - userarn: arn:aws:iam::XXXXXXXXXXXX:user/john
       username: john
       groups:
       - dev-operator-k8s-admins
       - dev-operator-k8s-users
-    - userarn: arn:aws:iam::677983237296:user/fred
+    - userarn: arn:aws:iam::XXXXXXXXXXXX:user/fred
       username: fred
       groups:
       - dev-operator-k8s-users

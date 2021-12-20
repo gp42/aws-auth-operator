@@ -9,6 +9,7 @@ theme:
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
+  - attr_list
 #extra:
 #  analytics:
 #    provider: google
