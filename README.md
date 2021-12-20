@@ -18,8 +18,9 @@ synchronization and *aws-auth* ConfigMap management.
 
 See [Documentation](https://gp42.github.io/aws-auth-operator) for Installation and Use information.
 
-![AWS IAM to EKS User
-Traceability](docs/public/images/iam-eks-trace.jpg)
+<div style="text-align:center">
+![AWS IAM to EKS User Traceability](docs/public/images/iam-eks-trace.jpg)
+</div>
 
 Read my blog article on [IAM User Traceability in AWS
 EKS](https://ops42.org/2021/12/19/User-Traceability-In-AWS-EKS.html?utm_source=aws-auth-operator_readme-md&utm_medium=git) for more information on the
